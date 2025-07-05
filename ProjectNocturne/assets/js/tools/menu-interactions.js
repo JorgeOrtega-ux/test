@@ -724,6 +724,33 @@ function setupGlobalEventListeners() {
                 noResultsMsg.remove();
             }
         }
+
+        const soundSearchInput = event.target.closest('#menu-sounds-search-input');
+        if (soundSearchInput) {
+            const searchTerm = soundSearchInput.value.toLowerCase();
+            const soundList = document.querySelector('.menu-sounds .sounds-list');
+            const soundItems = soundList.querySelectorAll('.menu-link[data-sound]');
+            let matchesFound = 0;
+            soundItems.forEach(item => {
+                const soundName = item.querySelector('.menu-link-text span').textContent.toLowerCase();
+                const match = soundName.includes(searchTerm);
+                item.style.display = match ? 'flex' : 'none';
+                if (match) matchesFound++;
+            });
+
+            let noResultsMsg = soundList.querySelector('.no-results-message');
+            if (matchesFound === 0 && searchTerm) {
+                if (!noResultsMsg) {
+                    noResultsMsg = document.createElement('div');
+                    noResultsMsg.className = 'no-results-message';
+                    soundList.appendChild(noResultsMsg);
+                }
+                const noResultsText = (typeof getTranslation === 'function') ? getTranslation('no_results', 'search') : 'No results found for';
+                noResultsMsg.textContent = `${noResultsText} "${soundSearchInput.value}"`;
+            } else if (noResultsMsg) {
+                noResultsMsg.remove();
+            }
+        }
     });
 
     document.body.addEventListener('click', (event) => {

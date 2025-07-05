@@ -261,29 +261,10 @@ export async function generateSoundList(listElement, actionName, activeSoundId =
     await populateAudioCache();
     if (!listElement) return;
 
-    const dropdownContainer = listElement.closest('.dropdown-menu-container');
-    if (!dropdownContainer) {
-        console.error("No se pudo encontrar el contenedor del dropdown para la lista de sonidos.");
-        return;
-    }
-
-    const headerElement = dropdownContainer.querySelector('.dropdown-menu-top');
-    const bodyListElement = dropdownContainer.querySelector('.dropdown-menu-bottom .menu-list');
-
-    if (!headerElement || !bodyListElement) {
-        console.warn("Dropdown estructurado para sonidos no encontrado, volviendo al método anterior.");
-        listElement.innerHTML = '';
-        _populateFullSoundList(listElement, actionName, activeSoundId);
-        return;
-    }
-    
-    // Limpiar contenido previo
-    headerElement.innerHTML = '';
-    bodyListElement.innerHTML = '';
+    listElement.innerHTML = '';
 
     const getTranslation = window.getTranslation || ((key, category) => key);
 
-    // --- Poblar Cabecera ---
     const uploadLink = document.createElement('div');
     uploadLink.className = 'menu-link';
     uploadLink.dataset.action = 'upload-audio';
@@ -291,34 +272,31 @@ export async function generateSoundList(listElement, actionName, activeSoundId =
         <div class="menu-link-icon"><span class="material-symbols-rounded">upload_file</span></div>
         <div class="menu-link-text"><span data-translate="upload_audio" data-translate-category="sounds">${getTranslation('upload_audio', 'sounds')}</span></div>
     `;
-    headerElement.appendChild(uploadLink);
+    listElement.appendChild(uploadLink);
 
-    // --- Poblar Cuerpo ---
     const availableSounds = getAvailableSounds();
     const defaultSounds = availableSounds.filter(s => !s.isCustom);
     const userAudios = availableSounds.filter(s => s.isCustom);
 
-    // ===== CAMBIO DE CLASE AQUÍ =====
     const defaultSoundsHeader = document.createElement('div');
-    defaultSoundsHeader.className = 'menu-content-header-sm'; // Clase cambiada
+    defaultSoundsHeader.className = 'menu-content-header-sm';
     defaultSoundsHeader.innerHTML = `<span>${getTranslation('default_audios', 'sounds')}</span>`;
-    bodyListElement.appendChild(defaultSoundsHeader);
+    listElement.appendChild(defaultSoundsHeader);
 
     defaultSounds.forEach(sound => {
         const menuLink = createSoundMenuItem(sound, actionName, activeSoundId, false);
-        bodyListElement.appendChild(menuLink);
+        listElement.appendChild(menuLink);
     });
 
     if (userAudios.length > 0) {
-        // ===== CAMBIO DE CLASE AQUÍ =====
         const userAudiosHeader = document.createElement('div');
-        userAudiosHeader.className = 'menu-content-header-sm'; // Clase cambiada
+        userAudiosHeader.className = 'menu-content-header-sm';
         userAudiosHeader.innerHTML = `<span>${getTranslation('uploaded_audios', 'sounds')}</span>`;
-        bodyListElement.appendChild(userAudiosHeader);
+        listElement.appendChild(userAudiosHeader);
 
         userAudios.forEach(sound => {
             const menuLink = createSoundMenuItem(sound, actionName, activeSoundId, true);
-            bodyListElement.appendChild(menuLink);
+            listElement.appendChild(menuLink);
         });
     }
 }
