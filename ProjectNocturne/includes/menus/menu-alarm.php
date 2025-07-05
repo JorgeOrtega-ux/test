@@ -70,12 +70,20 @@
                             </div>
                             <div class="menu-content-general">
                                 <div class="custom-select-wrapper">
-                                    <div class="custom-select-content" data-action="toggleAlarmSoundMenu">
+                                    <div class="custom-select-content" data-action="toggleAlarmSoundDropdown">
                                         <div class="custom-select-content-left">
                                             <span id="alarm-selected-sound" data-translate="classic_beep" data-translate-category="sounds"></span>
                                         </div>
                                         <div class="custom-select-content-right">
                                             <span class="material-symbols-rounded">expand_more</span>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-menu-container dropdown-menu--structured menu-alarm-sound disabled body-title" data-menu="alarmSoundMenu">
+                                        <div class="dropdown-menu-top">
+                                            </div>
+                                        <div class="dropdown-menu-bottom overflow-y">
+                                            <div class="menu-list">
+                                                </div>
                                         </div>
                                     </div>
                                     <div class="menu-action-button" data-action="previewAlarmSound">

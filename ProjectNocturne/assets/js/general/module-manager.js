@@ -52,10 +52,7 @@ const INDEPENDENT_OVERLAYS = {
     'menuAlarm': '[data-menu="Alarm"]',
     'menuTimer': '[data-menu="Timer"]',
     'menuWorldClock': '[data-menu="WorldClock"]',
-    'menuPaletteColors': '[data-menu="paletteColors"]',
-    'menuSounds': '[data-menu="Sounds"]',
-    'menuCountry': '[data-menu="Country"]',
-    'menuTimezone': '[data-menu="Timezone"]'
+    'menuPaletteColors': '[data-menu="paletteColors"]'
 };
 
 const TOGGLE_TO_MODULE_MAP = {
@@ -63,10 +60,7 @@ const TOGGLE_TO_MODULE_MAP = {
     'toggleMenuAlarm': 'overlayContainer',
     'toggleMenuTimer': 'overlayContainer',
     'toggleMenuWorldClock': 'overlayContainer',
-    'togglePaletteColors': 'overlayContainer',
-    'toggleMenuSounds': 'overlayContainer',
-    'toggleMenuCountry': 'overlayContainer',
-    'toggleMenuTimezone': 'overlayContainer'
+    'togglePaletteColors': 'overlayContainer'
 };
 
 // ========== CENTRALIZED STATE ==========
@@ -540,10 +534,7 @@ function getOverlayFromToggle(toggleName) {
         'toggleMenuAlarm': 'menuAlarm',
         'toggleMenuTimer': 'menuTimer',
         'toggleMenuWorldClock': 'menuWorldClock',
-        'togglePaletteColors': 'menuPaletteColors',
-        'toggleMenuSounds': 'menuSounds',
-        'toggleMenuCountry': 'menuCountry',
-        'toggleMenuTimezone': 'menuTimezone'
+        'togglePaletteColors': 'menuPaletteColors'
     };
 
     return toggleToOverlayMap[toggleName] || null;
@@ -554,10 +545,7 @@ function getToggleFromOverlay(overlayName) {
         'menuAlarm': 'toggleMenuAlarm',
         'menuTimer': 'toggleMenuTimer',
         'menuWorldClock': 'toggleMenuWorldClock',
-        'menuPaletteColors': 'togglePaletteColors',
-        'menuSounds': 'toggleMenuSounds',
-        'menuCountry': 'toggleMenuCountry',
-        'menuTimezone': 'toggleMenuTimezone'
+        'menuPaletteColors': 'togglePaletteColors'
     };
     return overlayToToggleMap[overlayName] || null;
 }

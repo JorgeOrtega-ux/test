@@ -46,12 +46,30 @@
                             </div>
                             <div class="menu-content-general">
                                 <div class="custom-select-wrapper">
-                                    <div class="custom-select-content" data-action="toggleCountryMenu">
+                                    <div class="custom-select-content" data-action="toggleCountryDropdown">
                                         <div class="custom-select-content-left">
                                             <span id="worldclock-selected-country" data-translate="select_a_country" data-translate-category="world_clock"></span>
                                         </div>
                                         <div class="custom-select-content-right">
                                             <span class="material-symbols-rounded">expand_more</span>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-menu-container dropdown-menu--structured menu-worldclock-country disabled body-title" data-menu="worldClockCountryMenu">
+                                        <div class="dropdown-menu-top">
+                                            <div class="search-content">
+                                                <div class="search-content-icon">
+                                                    <span class="material-symbols-rounded">search</span>
+                                                </div>
+                                                <div class="search-content-text">
+                                                    <input type="text" id="country-search-input" class="body-title" autocomplete="off" 
+                                                           data-translate="search_cities_placeholder" 
+                                                           data-translate-category="search" 
+                                                           data-translate-target="placeholder">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="dropdown-menu-bottom overflow-y">
+                                            <div class="menu-list"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -66,13 +84,16 @@
                             </div>
                             <div class="menu-content-general">
                                 <div class="custom-select-wrapper">
-                                    <div class="custom-select-content" data-action="toggleTimezoneMenu">
+                                    <div class="custom-select-content" data-action="toggleTimezoneDropdown">
                                         <div class="custom-select-content-left">
                                             <span id="worldclock-selected-timezone" data-translate="select_a_timezone" data-translate-category="world_clock"></span>
                                         </div>
                                         <div class="custom-select-content-right">
                                             <span class="material-symbols-rounded">expand_more</span>
                                         </div>
+                                    </div>
+                                    <div class="dropdown-menu-container menu-worldclock-timezone disabled body-title" data-menu="worldClockTimezoneMenu">
+                                        <div class="menu-list"></div>
                                     </div>
                                 </div>
                             </div>

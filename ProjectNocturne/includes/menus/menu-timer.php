@@ -18,6 +18,7 @@
             <div class="timer-search-results-wrapper disabled"></div>
             <div class="timer-creation-wrapper active">
                 
+                <!-- Selector de tipo de temporizador movido aquí -->
                 <div class="menu-section-selector">
                     <div class="custom-select-wrapper">
                         <div class="custom-select-content" data-action="toggleTimerTypeDropdown">
@@ -86,9 +87,15 @@
                             </div>
                             <div class="menu-content-general">
                                 <div class="custom-select-wrapper">
-                                    <div class="custom-select-content" data-action="toggleCountdownSoundMenu">
+                                    <div class="custom-select-content" data-action="toggleCountdownSoundDropdown">
                                         <div class="custom-select-content-left"><span id="countdown-selected-sound" data-translate="classic_beep" data-translate-category="sounds"></span></div>
                                         <div class="custom-select-content-right"><span class="material-symbols-rounded">expand_more</span></div>
+                                    </div>
+                                    <div class="dropdown-menu-container dropdown-menu--structured menu-countdown-sound disabled body-title" data-menu="countdownSoundMenu">
+                                        <div class="dropdown-menu-top"></div>
+                                        <div class="dropdown-menu-bottom overflow-y">
+                                            <div class="menu-list"></div>
+                                        </div>
                                     </div>
                                     <div class="menu-action-button" data-action="previewCountdownSound"><span class="material-symbols-rounded">play_arrow</span></div>
                                 </div>
@@ -156,9 +163,15 @@
                             </div>
                             <div class="menu-content-general">
                                 <div class="custom-select-wrapper">
-                                    <div class="custom-select-content" data-action="toggleCountToDateSoundMenu">
+                                    <div class="custom-select-content" data-action="toggleCountToDateSoundDropdown">
                                         <div class="custom-select-content-left"><span id="count-to-date-selected-sound" data-translate="classic_beep" data-translate-category="sounds"></span></div>
                                         <div class="custom-select-content-right"><span class="material-symbols-rounded">expand_more</span></div>
+                                    </div>
+                                    <div class="dropdown-menu-container dropdown-menu--structured menu-count-to-date-sound disabled body-title" data-menu="countToDateSoundMenu">
+                                        <div class="dropdown-menu-top"></div>
+                                        <div class="dropdown-menu-bottom overflow-y">
+                                            <div class="menu-list"></div>
+                                        </div>
                                     </div>
                                     <div class="menu-action-button" data-action="previewCountToDateSound"><span class="material-symbols-rounded">play_arrow</span></div>
                                 </div>

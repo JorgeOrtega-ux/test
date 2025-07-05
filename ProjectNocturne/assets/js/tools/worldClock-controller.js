@@ -299,35 +299,27 @@ function getClockLimit() {
 function createAndStartClockCard(title, country, timezone, existingId = null, save = true) {
     const grid = document.querySelector('.world-clocks-grid');
     if (!grid) return;
-    
-    // CORREGIR: Validar que timezone no esté vacío
-    if (!timezone || timezone.trim() === '') {
-        console.error('No se puede crear un reloj sin zona horaria');
-        return false;
-    }
-    
     const totalClockLimit = PREMIUM_FEATURES ? 100 : 5;
     const totalCurrentClocks = grid.querySelectorAll('.tool-card').length;
     const hasLocalClock = document.querySelector('.local-clock-card');
     const actualCurrentClocks = hasLocalClock && existingId !== 'local' ? totalCurrentClocks - 1 : totalCurrentClocks;
-    
     if (save && actualCurrentClocks >= totalClockLimit) {
+        // --- INICIO DE LA LÓGICA SIMPLIFICADA ---
         showDynamicIslandNotification(
             'system',
-            'limit_reached',
-            null,
+            'limit_reached', // Acción genérica
+            null, // El controlador de notificaciones elegirá el mensaje
             'notifications',
             { type: getTranslation('world_clock', 'tooltips') }
         );
-        return false;
+        // --- FIN DE LA LÓGICA SIMPLIFICADA ---
+        return;
     }
-
     const ct = window.ct;
     const countryForTimezone = ct.getCountryForTimezone(timezone);
     const timezoneObject = countryForTimezone ? ct.getTimezonesForCountry(countryForTimezone.id)?.find(tz => tz.name === timezone) : null;
     const utcOffsetText = timezoneObject ? `UTC ${timezoneObject.utcOffsetStr}` : '';
     const countryCode = countryForTimezone ? countryForTimezone.id : '';
-    
     const cardId = existingId || `clock-card-${Date.now()}`;
     const cardHTML = `
         <div class="tool-card world-clock-card" id="${cardId}" data-id="${cardId}" data-timezone="${timezone}" data-country="${country}" data-country-code="${countryCode}" data-title="${title}">
@@ -407,8 +399,6 @@ function createAndStartClockCard(title, country, timezone, existingId = null, sa
             updateEverythingWidgets();
         }
     }
-    
-    return true; // IMPORTANTE: Retornar true en caso de éxito
 }
 function updateClockCard(id, newData) {
     const card = document.getElementById(id);

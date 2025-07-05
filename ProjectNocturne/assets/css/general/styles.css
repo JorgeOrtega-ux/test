@@ -392,10 +392,7 @@ body {
 .menu-alarm,
 .menu-timer,
 .menu-worldClock,
-.menu-paletteColors,
-.menu-sounds,
-.menu-country,
-.menu-timezone {
+.menu-paletteColors {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -1152,10 +1149,7 @@ body {
     .menu-paletteColors,
     .menu-alarm,
     .menu-timer,
-    .menu-worldClock,
-    .menu-sounds,
-    .menu-country,
-    .menu-timezone {
+    .menu-worldClock {
         height: auto;
         max-height: 85%;
         border-bottom: 0;
@@ -1534,19 +1528,6 @@ body {
 }
 .dark-mode .menu-header {
     border-color: #ffffff20;
-}.menu-content-header-sm {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-    height: 40px;
-    padding: 12px;
-    gap: 8px;
-    font-weight: 500;
-    background-color: #ffffff;
-    border-radius: 8px;
-    border: 1px solid #00000020;
 }
 
 .dropdown-menu-container.add-menu-custom {
@@ -1573,13 +1554,4 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     min-width: 0; /* Importante para que funcione el ellipsis en flexbox */
-}
-
-.dark-mode .menu-sounds,
-.dark-mode .menu-country,
-.dark-mode .menu-timezone {
-    color: #ffffff;
-    background-color: #252627;
-    border-color: #ffffff20;
-    filter: unset;
 }
