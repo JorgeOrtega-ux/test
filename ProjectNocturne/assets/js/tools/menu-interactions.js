@@ -210,7 +210,10 @@ const resetWorldClockMenu = (menuElement) => {
         clearTimeout(menuTimeouts[menuId]);
         delete menuTimeouts[menuId];
     }
+    
+    // Resetear el estado
     state.worldClock = JSON.parse(JSON.stringify(initialState.worldClock));
+    
     const titleInput = menuElement.querySelector('#worldclock-title');
     if (titleInput) {
         titleInput.value = '';
@@ -220,8 +223,14 @@ const resetWorldClockMenu = (menuElement) => {
     resetDropdownDisplay(menuElement, '#worldclock-selected-country', 'select_a_country', 'world_clock');
     resetDropdownDisplay(menuElement, '#worldclock-selected-timezone', 'select_a_timezone', 'world_clock');
 
-    menuElement.querySelector('[data-action="toggleCountryMenu"]').classList.remove('input-error');
+    // CORREGIR: Asegurar que los selectores tengan el estado correcto
+    const countrySelector = menuElement.querySelector('[data-action="toggleCountryMenu"]');
     const timezoneSelector = menuElement.querySelector('[data-action="toggleTimezoneMenu"]');
+    
+    if (countrySelector) {
+        countrySelector.classList.remove('input-error');
+    }
+    
     if (timezoneSelector) {
         timezoneSelector.classList.add('disabled-interactive');
         timezoneSelector.classList.remove('input-error');
@@ -236,6 +245,7 @@ const resetWorldClockMenu = (menuElement) => {
     }
     menuElement.removeAttribute('data-editing-id');
 };
+
 
 
 export function prepareAlarmForEdit(alarmData) {
@@ -657,10 +667,16 @@ async function populateTimezoneDropdown(parentMenu, countryCode) {
                 const cityName = tz.name.split('/').pop().replace(/_/g, ' ');
                 const displayName = `(UTC ${tz.utcOffsetStr}) ${cityName}`;
                 const link = document.createElement('div');
-                link.className = 'menu-link'; link.setAttribute('data-action', 'selectTimezone'); link.setAttribute('data-timezone', tz.name);
-                link.innerHTML = `<div class="menu-link-icon"><span class="material-symbols-rounded">schedule</span></div><div class="menu-link-text"><span>${displayName}</span></div>`;
+                link.className = 'menu-link';
+                link.setAttribute('data-action', 'selectTimezone');
+                link.setAttribute('data-timezone', tz.name);
+                link.innerHTML = `
+                    <div class="menu-link-icon"><span class="material-symbols-rounded">schedule</span></div>
+                    <div class="menu-link-text"><span>${displayName}</span></div>
+                `;
                 timezoneList.appendChild(link);
             });
+            // CORREGIR: Habilitar el selector
             timezoneSelector.classList.remove('disabled-interactive');
         } else {
             const noTimezonesText = (typeof getTranslation === 'function') ? getTranslation('no_timezones_found', 'world_clock') : '⚠️ No timezones found.';
@@ -800,6 +816,7 @@ function setupGlobalEventListeners() {
     });
 }
 
+
 async function handleMenuClick(event, parentMenu) {
     const target = event.target;
     const actionTarget = target.closest('[data-action]');
@@ -855,24 +872,38 @@ async function handleMenuClick(event, parentMenu) {
         goBackToPreviousMenu();
         return;
     }
+// En menu-interactions.js, corregir la función selectCountry
+
+if (action === 'selectCountry') {
+    event.stopPropagation();
+    const countryCode = actionTarget.getAttribute('data-country-code');
+    const countryName = actionTarget.querySelector('.menu-link-text span')?.textContent;
     
-    if (action === 'selectCountry') {
-        event.stopPropagation();
-        const countryCode = actionTarget.getAttribute('data-country-code');
-        const countryName = actionTarget.querySelector('.menu-link-text span')?.textContent;
-        state.worldClock.country = countryName;
-        state.worldClock.countryCode = countryCode;
-        state.worldClock.timezone = '';
+    // Actualizar el estado
+    state.worldClock.country = countryName;
+    state.worldClock.countryCode = countryCode;
+    state.worldClock.timezone = ''; // Resetear timezone
 
-        const mainWorldClockMenu = getMenuElement('menuWorldClock');
-        updateDisplay('#worldclock-selected-country', countryName, mainWorldClockMenu);
-        resetDropdownDisplay(mainWorldClockMenu, '#worldclock-selected-timezone', 'select_a_timezone', 'world_clock');
-        const timezoneSelector = mainWorldClockMenu.querySelector('[data-action="toggleTimezoneMenu"]');
-        timezoneSelector.classList.add('disabled-interactive');
-
-        goBackToPreviousMenu();
-        return;
+    const mainWorldClockMenu = getMenuElement('menuWorldClock');
+    updateDisplay('#worldclock-selected-country', countryName, mainWorldClockMenu);
+    resetDropdownDisplay(mainWorldClockMenu, '#worldclock-selected-timezone', 'select_a_timezone', 'world_clock');
+    
+    // AQUÍ ESTÁ EL PROBLEMA: Buscar el selector correcto
+    const timezoneSelector = mainWorldClockMenu.querySelector('[data-action="toggleTimezoneMenu"]');
+    if (timezoneSelector) {
+        // Primero activar para que se pueda usar
+        timezoneSelector.classList.remove('disabled-interactive');
+        
+        // Luego poblar las zonas horarias
+        populateTimezoneDropdown(mainWorldClockMenu, countryCode).then(() => {
+            // Asegurar que sigue habilitado después de poblar
+            timezoneSelector.classList.remove('disabled-interactive');
+        });
     }
+
+    goBackToPreviousMenu();
+    return;
+}
 
     if (action === 'selectTimezone') {
         event.stopPropagation();
@@ -1020,35 +1051,41 @@ async function handleMenuClick(event, parentMenu) {
             }
             break;
         }
-        case 'addWorldClock': {
-            const clockTitleInput = parentMenu.querySelector('#worldclock-title');
-            const { country, timezone } = state.worldClock;
-            const countrySelector = parentMenu.querySelector('[data-action="toggleCountryMenu"]');
-            const timezoneSelector = parentMenu.querySelector('[data-action="toggleTimezoneMenu"]');
+       case 'addWorldClock': {
+    const clockTitleInput = parentMenu.querySelector('#worldclock-title');
+    const { country, timezone } = state.worldClock;
+    const countrySelector = parentMenu.querySelector('[data-action="toggleCountryMenu"]');
+    const timezoneSelector = parentMenu.querySelector('[data-action="toggleTimezoneMenu"]');
 
-            let isValid = validateField(clockTitleInput.parentElement, clockTitleInput.value.trim());
-            isValid = validateField(countrySelector, country) && isValid;
-            
-            if (!timezoneSelector.classList.contains('disabled-interactive')) {
-                isValid = validateField(timezoneSelector, timezone) && isValid;
-            }
+    let isValid = validateField(clockTitleInput.parentElement, clockTitleInput.value.trim());
+    isValid = validateField(countrySelector, country) && isValid;
+    
+    // CORREGIR: Validar zona horaria solo si el selector está habilitado
+    if (!timezoneSelector.classList.contains('disabled-interactive')) {
+        isValid = validateField(timezoneSelector, timezone) && isValid;
+    } else {
+        // Si el selector está deshabilitado, marcar como inválido
+        isValid = false;
+        timezoneSelector.classList.add('input-error');
+    }
 
-            if (!isValid) return;
+    if (!isValid) return;
 
-            const clockLimit = window.worldClockManager?.getClockLimit() ?? (PREMIUM_FEATURES ? 100 : 5);
-            if ((window.worldClockManager?.getClockCount() ?? 0) >= clockLimit) {
-                showDynamicIslandNotification('system', 'limit_reached', null, 'notifications', { type: getTranslation('world_clock', 'tooltips') });
-                return;
-            }
-            addSpinnerToCreateButton(actionTarget);
-            setTimeout(() => {
-                if (window.worldClockManager?.createAndStartClockCard(clockTitleInput.value.trim(), country, timezone)) {
-                    deactivateModule('overlayContainer', { source: 'add-world-clock' });
-                } else removeSpinnerFromCreateButton(actionTarget);
-                resetWorldClockMenu(parentMenu);
-            }, 500);
-            break;
-        }
+    const clockLimit = window.worldClockManager?.getClockLimit() ?? (PREMIUM_FEATURES ? 100 : 5);
+    if ((window.worldClockManager?.getClockCount() ?? 0) >= clockLimit) {
+        showDynamicIslandNotification('system', 'limit_reached', null, 'notifications', { type: getTranslation('world_clock', 'tooltips') });
+        return;
+    }
+    
+    addSpinnerToCreateButton(actionTarget);
+    setTimeout(() => {
+        if (window.worldClockManager?.createAndStartClockCard(clockTitleInput.value.trim(), country, timezone)) {
+            deactivateModule('overlayContainer', { source: 'add-world-clock' });
+        } else removeSpinnerFromCreateButton(actionTarget);
+        resetWorldClockMenu(parentMenu);
+    }, 500);
+    break;
+}
         case 'saveAlarmChanges': {
             const editingId = parentMenu.getAttribute('data-editing-id');
             const alarmTitleInput = parentMenu.querySelector('#alarm-title');
